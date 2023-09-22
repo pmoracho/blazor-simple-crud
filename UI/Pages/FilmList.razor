@@ -1,0 +1,62 @@
+﻿@page "/filmlist"
+@using Model
+@using Interfaces
+@inject IFilmService FilmService
+@inject NavigationManager NavigationManager
+
+<h1>Film List</h1>
+
+<p>Esta página retorna la lista de peliculas</p>
+
+@if (films == null) {
+    <p><em>Cargando...</em></p>
+} else {
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td colspan="1" style="text.align:center">
+                    <input type="submit" value="Agregar Film" @onclick="AddFilm"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead>
+            <th>Titulo</th>
+            <th>Director</th>
+            <th>Fecha</th>
+            <th></th>
+            <th></th>
+        </thead>
+        <tbody>
+            @foreach (Film film in films) {
+                <tr>
+                    <td>@film.Title</td>
+                    <td>@film.Director</td>
+                    <td>@film.ReleaseDate</td>
+                    <td><a href="/filmdetails/@film.Id"><i>Editar</i></a></td>
+                    <td><a href="/filmdelete/@film.Id"><i>Borrar</i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Film>? films;
+    protected override async Task OnInitializedAsync() {
+
+        try {
+            films = await FilmService.GetAllFilms();
+
+        } catch(Exception) {
+            throw;
+        }
+    }
+
+    protected void AddFilm() {
+        NavigationManager.NavigateTo("filmdetails");
+    }
+}
