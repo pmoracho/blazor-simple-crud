@@ -5,35 +5,47 @@
 @inject IFilmService FilmService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Film -</PageTitle>
+<PageTitle>Film - Details</PageTitle>
 
-<h1>Film - Details</h1>
-
-<EditForm Model="@film">
-    <table class="table">
-        <tbody>
-            <tr>
-                <td>Titulo:</td>
-                <td><input type="text" @bind="film.Title"/></td>
-            </tr>
-
-            <tr>
-                <td>Director:</td>
-                <td><input type="text" @bind="film.Director"/></td>
-            </tr>
-            <tr>
-                <td>Fecha:</td>
-                <td><input type="text" @bind="film.ReleaseDate"/></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text.align:center">
-                    <input type="submit" value="Salvar" @onclick="SaveFilm"/>
-                    <input type="button" value="Cancelar" @onclick="Cancel"/>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</EditForm>
+<RadzenTemplateForm Data="@film">
+    <div class="row">
+        <div class="col-10">
+            <RadzenFieldset Text="Film - Details">
+                <div class="row">
+                    <div class="col-md-2 align-items-center d-flex">
+                        <RadzenLabel Text="Title" />
+                    </div>
+                    <div class="col-md-6" fieldSpace>
+                        <RadzenTextBox Name="Title" @bind-Value="film.Title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 align-items-center d-flex">
+                        <RadzenLabel Text="Director" />
+                    </div>
+                    <div class="col-md-6" fieldSpace>
+                        <RadzenTextBox Name="Director" @bind-Value="film.Director" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 align-items-center d-flex">
+                        <RadzenLabel Text="Release Date" />
+                    </div>
+                    <div class="col-md-6" fieldSpace>
+                        <RadzenDatePicker @bind-Value="film.ReleaseDate" DateFormat="d"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 align-items-center d-flex" />
+                    <div class="col-md-6" fieldSpace>
+                        <RadzenButton Text="Salvar" ButtonStyle="Radzen.ButtonStyle.Primary" Click="@(args => SaveFilm())" />
+                        <RadzenButton Text="Cancelar" ButtonStyle="Radzen.ButtonStyle.Secondary" Click="@(args => Cancel())" />
+                    </div>
+                </div>
+            </RadzenFieldset>
+        </div>
+    </div>
+</RadzenTemplateForm>
 
 
 @code {

@@ -3,6 +3,7 @@
 @using Interfaces
 @inject IFilmService FilmService
 @inject NavigationManager NavigationManager
+@using Radzen
 
 <h1>Film List</h1>
 
@@ -12,45 +13,60 @@
     <p><em>Cargando...</em></p>
 } else {
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <td colspan="1" style="text.align:center">
-                    <input type="submit" value="Agregar Film" @onclick="AddFilm"/>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="display: flex; align-items: center; margin-bottom: 16px">
+        <RadzenButton Text="Export XLS" Icon="grid_on" Click="@(args => Export("excel"))" class="mb-1 me-2" />
+        <RadzenButton Text="Export CSV" Icon="wrap_text" Click="@(args => Export("csv"))" class="mb-1 me-2" />
+        <RadzenButton Text="Nuevo Film" Click="@(args => AddFilm())" class="mb-1" />
+    </div>
 
-    <table class="table">
-        <thead>
-            <th>Titulo</th>
-            <th>Director</th>
-            <th>Fecha</th>
-            <th></th>
-            <th></th>
-        </thead>
-        <tbody>
-            @foreach (Film film in films) {
-                <tr>
-                    <td>@film.Title</td>
-                    <td>@film.Director</td>
-                    <td>@film.ReleaseDate</td>
-                    <td><a href="/filmdetails/@film.Id"><i>Editar</i></a></td>
-                    <td><a href="/filmdelete/@film.Id"><i>Borrar</i></a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <RadzenGrid Data="@films" TItem="Film"
+                ColumnWidth="200px"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                FilterMode="FilterMode.Advanced"
+                PageSize="4"
+                PagerHorizontalAlign="HorizontalAlign.Center"
+                FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                AllowColumnPicking=@WithColumnPicker>
+
+
+        <Columns>
+            <RadzenGridColumn TItem="Film" Property="Title" Title="Titulo"></RadzenGridColumn>
+            <RadzenGridColumn TItem="Film" Property="Director" Title="Director"></RadzenGridColumn>
+
+            <RadzenGridColumn TItem="Film" Property="ReleaseDate" Title="Fecha">
+                <Template Context="data">
+                    @String.Format("{0:d}", data.ReleaseDate)
+                </Template>
+            </RadzenGridColumn>
+
+             <RadzenGridColumn TItem="Film" Title="Editar">
+                <Template Context="data">
+                    <RadzenLink Path=@($"/filmdetails/{data.Id}") Text="Editar" Target="_blank" ></RadzenLink>
+                </Template>
+            </RadzenGridColumn>
+
+             <RadzenGridColumn TItem="Film" Title="Borrar">
+                <Template Context="data">
+                    <RadzenLink Path=@($"/filmdelete/{data.Id}") Text="Borrar" Target="_blank" ></RadzenLink>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+
+    </RadzenGrid>
+
 }
 
 @code {
+    [Parameter]
+    public bool WithColumnPicker { get; set; } = false;
     private IEnumerable<Film>? films;
     protected override async Task OnInitializedAsync() {
 
         try {
             films = await FilmService.GetAllFilms();
-
         } catch(Exception) {
             throw;
         }
@@ -58,5 +74,16 @@
 
     protected void AddFilm() {
         NavigationManager.NavigateTo("filmdetails");
+    }
+
+    public void Export(string type)
+    {
+        @* service.Export("OrderDetails", type, new Query()
+            {
+                OrderBy = grid.Query.OrderBy,
+                Filter = grid.Query.Filter,
+                Select = string.Join(",", grid.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property))
+                        .Select(c => c.Property.Contains(".") ? $"{c.Property} as {c.Property.Replace(".", "_")}" : c.Property))
+            }); *@
     }
 }

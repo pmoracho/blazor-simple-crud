@@ -11,11 +11,15 @@
     <Folder Include="Services/" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Radzen.Blazor" Version="4.16.2" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RuntimeIdentifiers>win10-x64;ubuntu.22.04-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>ubuntu.22.04-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
 </Project>

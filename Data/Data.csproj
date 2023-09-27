@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RuntimeIdentifiers>win10-x64;ubuntu.22.04-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>ubuntu.22.04-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
